@@ -1,0 +1,13 @@
+{
+  "name": "tp1",
+  "version": "1.0.0",
+  "description": "tp1_javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js"
+  },
+  "author": "Antoine Delaby",
+  "license": "ISC",
+  "type" : "module"
+}
