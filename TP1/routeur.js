@@ -15,11 +15,9 @@ export default class Routeur {
     }
 
     handleRequest(){
-        if(this.#url.pathname == '/first'){
+        if(this.#url.pathname == '/first' || this.#url.pathname == '/second'){
             new htmlResponseBuilder(this.#response, this.#url).buildResponse();
-        }else if(this.#url.pathname == '/second'){
-            new htmlResponseBuilder(this.#response, this.#url).buildResponse();
-        }else if(this.#url.pathname == '/json'){
+        }else if(this.#url.pathname == '/json' || this.#url.pathname == '/random'){
             new jsonResponseBuilder(this.#response, this.#url).buildResponse();
         }else{
             new htmlResponseBuilder(this.#response, this.#url).buildResponse();
