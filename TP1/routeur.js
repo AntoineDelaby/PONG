@@ -1,6 +1,7 @@
 import { URL } from 'url';
 import htmlResponseBuilder from './htmlResponseBuilder.js';
 import jsonResponseBuilder from './jsonResponseBuilder.js';
+import fileResponseBuilder from './fileResponseBuilder.js';
 
 export default class Routeur {
 
@@ -19,6 +20,8 @@ export default class Routeur {
             new htmlResponseBuilder(this.#response, this.#url).buildResponse();
         }else if(this.#url.pathname == '/json' || this.#url.pathname == '/random'){
             new jsonResponseBuilder(this.#response, this.#url).buildResponse();
+        }else if(this.#url.pathname.split('/')[1] == 'public'){
+            new fileResponseBuilder(this.#response, this.#url.pathname).buildResponse();
         }else{
             new htmlResponseBuilder(this.#response, this.#url).buildResponse();
         }

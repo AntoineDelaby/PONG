@@ -28,7 +28,6 @@ export default class jsonResponseBuilder {
             params += `\"${param}\":\"${val}\",`;
         })
         params += "\"date\":\"" + new Date().toISOString() + "\"}";
-        console.log(params);
         return params;
     }
 
