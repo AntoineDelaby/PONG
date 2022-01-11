@@ -49,37 +49,6 @@ function addData(chart, label, data) {
   chart.update();
 }
 
-socket.on('2', () => {
-  addData(myChart, myChart.data.labels.pop(), 2)
-  console.log(2)
-})
-
-socket.on('3', () => {
-  addData(myChart, myChart.data.labels.pop(), 3)
-  console.log(3)
-})
-
-socket.on('4', () => {
-  addData(myChart, myChart.data.labels.pop(), 4)
-  console.log(4)
-})
-
-socket.on('5', () => {
-  addData(myChart, myChart.data.labels.pop(), 5)
-  console.log(5)
-})
-
-socket.on('6', () => {
-  addData(myChart, myChart.data.labels.pop(), 6)
-  console.log(6)
-})
-
-socket.on('7', () => {
-  addData(myChart, myChart.data.labels.pop(), 7)
-  console.log(7)
-})
-
-socket.on('8', () => {
-  addData(myChart, myChart.data.labels.pop(), 8)
-  console.log(8)
+socket.on('nbRandom', (nbRandom) => {
+  addData(myChart, myChart.data.labels.pop(), nbRandom);
 })

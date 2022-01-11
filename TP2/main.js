@@ -1,7 +1,6 @@
 import http from 'http';
 import { Server as ServerIO } from 'socket.io'
 import RequestController from './controllers/requestController.js';
-import { cp } from 'fs';
 
 const server = http.createServer(
 	(request, response) => new RequestController(request, response).handleRequest()
@@ -9,13 +8,24 @@ const server = http.createServer(
 
 const io = new ServerIO(server);
 
-io.on('connection', socket => console.log(`connection done by ${socket.id}`) );
 
-setInterval(nbRandom, 1000);
+// setInterval(nbRandomSame, 2000);
 
-function nbRandom() {
-	io.emit(`${parseInt((Math.random() * 7), 10)+2}`);
+// function nbRandomSame() {
+// 	io.emit('nbRandom', parseInt((Math.random() * 7), 10)+2);
+// }
+
+let intervals = {};
+
+io.on('connection', socket => {
+	intervals[socket.id] = setInterval(() => {nbRandomDifferent(socket.id)}, 2000);
+	console.log(`connection done by ${socket.id}`)}
+);
+
+function nbRandomDifferent(socketId) {
+	io.to(socketId).emit('nbRandom', parseInt((Math.random() * 7), 10)+2);
+	console.log('Nb Send')
 }
 
-console.log('listening on 8000')
-server.listen(8000);
+console.log('listening on 8080')
+server.listen(8080);
