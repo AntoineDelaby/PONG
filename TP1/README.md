@@ -5,7 +5,7 @@
 
 # Liens Utiles
 
-- [Cours JS](https://www.fil.univ-lille1.fr/~routier/enseignement/licence/jsfs/html/node-socketio.html)
+- [Cours JS](https://www.fil.univ-lille1.fr/~routier/enseignement/licence/jsfs/html/node-serveur.html)
 - [Support TP1](https://www.fil.univ-lille1.fr/~routier/enseignement/licence/jsfs/tdtp/toy-server.html)
 
 # Organisation du dépôt
