@@ -12,6 +12,7 @@
 
 Dans ce dossier intitulé `TP1`, vous trouverez :
 - Ce fichier README.md qui nous renseigne sur l'organisation du dossier `TP1`.
+- Un dossier `public` contenant les ressources publiques du TP.
 - Un fichier `index.js` qui créé et initialise le serveur.
 - Un fichier `router.js` qui gère les différentes routes.
 - Un fichier `htmlResponseBuilder.js` qui se charge de construire une réponse html lorsqu'on fait une requête avec comme route first ou second.
