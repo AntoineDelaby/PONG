@@ -15,17 +15,23 @@ const io = new ServerIO(server);
 // 	io.emit('nbRandom', parseInt((Math.random() * 7), 10)+2);
 // }
 
-let intervals = {};
+let intervals = new Map;
 
 io.on('connection', socket => {
-	intervals[socket.id] = setInterval(() => {nbRandomDifferent(socket.id)}, 2000);
+	intervals.set(socket.id, setInterval(() => {nbRandomDifferent(socket.id)}, 2000));
 	console.log(`connection done by ${socket.id}`)}
 );
 
 function nbRandomDifferent(socketId) {
 	io.to(socketId).emit('nbRandom', parseInt((Math.random() * 7), 10)+2);
-	console.log('Nb Send')
+	console.log(`Nb Send to ${socketId}`);
 }
 
 console.log('listening on 8080')
 server.listen(8080);
+
+io.on('disconnect', socket => {
+	intervals.delete(socket.id);
+})
+
+//Q6.2 : On constate que même si on ferme un client, le serveur continue de lui envoyer des données.
