@@ -5,16 +5,16 @@ import CopyPlugin from 'copy-webpack-plugin';
 
 const PRODUCTION = true;
 export default {
-  entry: '../client/src/scripts/pong.js',
+  entry: './src/scripts/pong.js',
   mode :  (PRODUCTION ? 'production' : 'development'),
   output: {
-    path: (PRODUCTION ? path.resolve('./public') : path.resolve('../client/dist')),
+    path: (PRODUCTION ? path.resolve('../server/public') : path.resolve('dist')),
     filename: (PRODUCTION ? 'bundle.js' : 'scripts/bundle.js')
   },
   devtool : (PRODUCTION ? undefined : 'eval-source-map'),
   devServer: {
     static: {
-       publicPath: path.resolve('../client/dist'),
+       publicPath: path.resolve('dist'),
        watch : true
     },
     host: 'localhost',
@@ -45,21 +45,21 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-  template: "../client/src/index.html",
+  template: "./src/index.html",
   filename: "./index.html"
     }),
     new CopyPlugin({
       patterns: [
 	{
-    from: '../client/src/*.html',
+    from: './src/*.html',
 	  to:   'html/[name].html'
 	},
 	{
-	  from: '../client/src/images/*',
+	  from: './src/images/*',
 	  to:   'images/[name][ext]'
 	},
 	{
-	  from: '../client/src/style/*',
+	  from: './src/style/*',
 	  to:   'style/[name][ext]'
 	},
       ]
