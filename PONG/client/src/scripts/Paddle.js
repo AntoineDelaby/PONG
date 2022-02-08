@@ -1,7 +1,7 @@
 import Mobile from './Mobile.js';
 
 const PADDLE_IMAGE_SRC = './images/paddle.png';
-const SHIFT_Y = 20;
+const SHIFT_Y = 30;
 
 export default class Paddle extends Mobile {
    

@@ -35,10 +35,8 @@ export default class Game {
       if(e.key == "ArrowUp"){
         this.paddle.moveUp();
         this.moveAndDraw();
-        console.log("go up");
       }else if(e.key == "ArrowDown"){
         this.paddle.moveDown();
-        console.log("go down");
         this.moveAndDraw();
       }
     })

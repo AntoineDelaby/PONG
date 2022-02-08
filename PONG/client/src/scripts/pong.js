@@ -2,8 +2,9 @@
 
 import Game from './Game.js';
 
+const theField = document.getElementById("field");
+
 const init = () => {
-  const theField = document.getElementById("field");
   const theGame = new Game(theField);
 
   document.getElementById('start').addEventListener("click", () => startGame(theGame) );
@@ -18,11 +19,18 @@ let started = false;
  */
 const startGame = theGame => {
   if (!started) {
+    if(theGame.ball.shiftX == 0){
+      theGame = new Game(theField);
+    }
     theGame.start();
     document.getElementById('start').value = 'stop';
   }
   else {
-    document.getElementById('start').value = 'jouer';
+    if(theGame.ball.shiftX == 0 && theGame.ball.shiftY == 0){
+      document.getElementById('start').value = 'rejouer';
+    } else {
+      document.getElementById('start').value = 'jouer';
+    }
     theGame.stop();
   }
   started = ! started;
