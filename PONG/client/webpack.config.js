@@ -3,7 +3,7 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
-const PRODUCTION = true;
+const PRODUCTION = false;
 export default {
   entry: './src/scripts/pong.js',
   mode :  (PRODUCTION ? 'production' : 'development'),

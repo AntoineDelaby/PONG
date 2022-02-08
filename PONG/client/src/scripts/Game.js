@@ -1,4 +1,5 @@
 import Ball from './Ball.js';
+import Paddle from './Paddle.js';
 
 
 /**
@@ -15,15 +16,32 @@ export default class Game {
     this.raf = null;
     this.canvas = canvas;
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
+    this.paddle = new Paddle(this.canvas.height/2, this);
   }
 
   /** start this game animation */
   start() {
     this.animate();
+    this.initPaddle();
   }
   /** stop this game animation */
   stop() {
     window.cancelAnimationFrame(this.raf);
+  }
+
+  initPaddle(){
+    document.addEventListener("keydown", e => {
+      e.preventDefault();
+      if(e.key == "ArrowUp"){
+        this.paddle.moveUp();
+        this.moveAndDraw();
+        console.log("go up");
+      }else if(e.key == "ArrowDown"){
+        this.paddle.moveDown();
+        console.log("go down");
+        this.moveAndDraw();
+      }
+    })
   }
 
   /** animate the game : move and draw */
@@ -38,6 +56,12 @@ export default class Game {
     // draw and move the ball
     this.ball.move();
     this.ball.draw(ctxt);
+    this.paddle.draw(ctxt);
+
+    // console.log(`Coord paddle x : ${this.paddle.x}`);
+    // console.log(`Coord paddle y : ${this.paddle.y}`);
+    // console.log(`Coord ball x : ${this.ball.x}`);
+    // console.log(`Coord ball y : ${this.ball.y}`);
   }
 
 }
