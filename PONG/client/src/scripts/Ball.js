@@ -28,18 +28,19 @@ export default class Ball extends Mobile {
    * when moving a ball bounces inside the limit of its game's canvas
    */
   move() {
-    const gamePaddle = this.theGame.paddle;
+    const playersScore = this.theGame.scores;
+    const gamePaddleLeft = this.theGame.paddleLeft;
+    const gamePaddleRight = this.theGame.paddleRight;
     if (this.y <= 0 || (this.y+this.height >= this.theGame.canvas.height)) {
       this.shiftY = - this.shiftY;    // rebond en haut ou en bas
     }
-    else if(((this.x >= (gamePaddle.x + gamePaddle.width)) && (this.x <= (gamePaddle.x + gamePaddle.width + 10))) && ((this.y >= gamePaddle.y) && (this.y <= (gamePaddle.y + gamePaddle.height)))){
-      this.shiftX = - this.shiftX;    // rebond sur la raquette
-      console.log("RAQUETTE");
+    else if(((this.x >= (gamePaddleLeft.x + gamePaddleLeft.width)) && (this.x <= (gamePaddleLeft.x + gamePaddleLeft.width + 10))) && ((this.y >= (gamePaddleLeft.y - 5)) && (this.y <= (gamePaddleLeft.y + gamePaddleLeft.height + 5)))){
+      this.shiftX = - this.shiftX;    // rebond sur la raquette de gauche
+    }else if(((this.x <= (gamePaddleRight.x + gamePaddleRight.width)) && (this.x >= (gamePaddleRight.x - 10))) && ((this.y >= (gamePaddleRight.y - 5)) && (this.y <= (gamePaddleRight.y + gamePaddleRight.height + 5)))){
+      this.shiftX = - this.shiftX;    // rebond sur la raquette de droite
     }
-    else if (this.x <= 0) {
+    else if (this.x <= 0 || this.x + this.width >= this.theGame.canvas.width) {
       this.stopMoving();
-    }else if(this.x + this.width >= this.theGame.canvas.width ){
-      this.shiftX = - this.shiftX;    // rebond à droite
     }
     super.move();
   }

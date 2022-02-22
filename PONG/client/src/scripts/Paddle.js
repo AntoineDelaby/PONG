@@ -1,12 +1,12 @@
 import Mobile from './Mobile.js';
 
 const PADDLE_IMAGE_SRC = './images/paddle.png';
-const SHIFT_Y = 30;
+const SHIFT_Y = 50;
 
 export default class Paddle extends Mobile {
    
-    constructor(y, theGame) {
-        super(10, y, PADDLE_IMAGE_SRC , 0, SHIFT_Y);
+    constructor(x, y, theGame) {
+        super(x, y, PADDLE_IMAGE_SRC , 0, SHIFT_Y);
         this.theGame = theGame;
     }
 

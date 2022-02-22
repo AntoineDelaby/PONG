@@ -7,9 +7,10 @@ const PRODUCTION = true;
 export default {
   entry: './src/scripts/pong.js',
   mode :  (PRODUCTION ? 'production' : 'development'),
+  watch: true,
   output: {
-    path: (PRODUCTION ? path.resolve('../server/public') : path.resolve('dist')),
-    filename: (PRODUCTION ? 'bundle.js' : 'scripts/bundle.js')
+    path: path.resolve('../server/public'),
+    filename: 'bundle.js'
   },
   devtool : (PRODUCTION ? undefined : 'eval-source-map'),
   devServer: {
@@ -41,7 +42,7 @@ export default {
           }
         ]
       }
-    ]
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({

@@ -16,7 +16,8 @@ export default class Game {
     this.raf = null;
     this.canvas = canvas;
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
-    this.paddle = new Paddle(this.canvas.height/2, this);
+    this.paddleLeft = new Paddle(10, this.canvas.height/2, this);
+    this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, this);
   }
 
   /** start this game animation */
@@ -27,16 +28,31 @@ export default class Game {
   /** stop this game animation */
   stop() {
     window.cancelAnimationFrame(this.raf);
+    if(this.ball.x <= 0){
+      console.log("Point pour j2");
+      MY.player2Score += 1;
+    }else if(this.ball.x + this.ball.width >= this.canvas.width){
+      MY.player1Score += 1;
+      console.log("Point pour j1");
+    }
+    document.getElementById("scores").innerHTML = `${MY.player1Score} : ${MY.player2Score}`;
   }
 
   initPaddle(){
     document.addEventListener("keydown", e => {
       e.preventDefault();
+      console.log("Key pressed : ", e.key);
       if(e.key == "ArrowUp"){
-        this.paddle.moveUp();
+        this.paddleRight.moveUp();
         this.moveAndDraw();
       }else if(e.key == "ArrowDown"){
-        this.paddle.moveDown();
+        this.paddleRight.moveDown();
+        this.moveAndDraw();
+      }else if(e.key == "z"){
+        this.paddleLeft.moveUp();
+        this.moveAndDraw();
+      }else if(e.key == "s"){
+        this.paddleLeft.moveDown();
         this.moveAndDraw();
       }
     })
@@ -54,12 +70,8 @@ export default class Game {
     // draw and move the ball
     this.ball.move();
     this.ball.draw(ctxt);
-    this.paddle.draw(ctxt);
-
-    // console.log(`Coord paddle x : ${this.paddle.x}`);
-    // console.log(`Coord paddle y : ${this.paddle.y}`);
-    // console.log(`Coord ball x : ${this.ball.x}`);
-    // console.log(`Coord ball y : ${this.ball.y}`);
+    this.paddleLeft.draw(ctxt);
+    this.paddleRight.draw(ctxt);
   }
 
 }

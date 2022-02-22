@@ -5,6 +5,9 @@ import Game from './Game.js';
 const theField = document.getElementById("field");
 
 const init = () => {
+  window.MY = {};
+  MY.player1Score = 0;
+  MY.player2Score = 0;
   const theGame = new Game(theField);
 
   document.getElementById('start').addEventListener("click", () => startGame(theGame) );
