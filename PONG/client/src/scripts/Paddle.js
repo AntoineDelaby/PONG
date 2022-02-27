@@ -36,7 +36,6 @@ export default class Paddle extends Mobile {
 
     addPoint() {
         this.score ++;
-        console.log(this.score);
     }
 
     resetScore() {

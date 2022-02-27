@@ -69,7 +69,6 @@ export default class Ball extends Mobile {
     } else if (value > 0) {
       res = Math.floor(value/sectionHeight)+1
     }
-    console.log(res);
     return res;
   }
 

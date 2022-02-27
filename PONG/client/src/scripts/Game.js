@@ -51,7 +51,6 @@ export default class Game {
   initPaddle(){
     document.addEventListener("keydown", e => {
       e.preventDefault();
-      console.log(this.status)
       if (this.status != 'Stop') {
         // console.log("Key pressed : ", e.key);
         if(e.key == "ArrowUp"){
