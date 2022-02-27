@@ -4,10 +4,12 @@ const PADDLE_IMAGE_SRC = './images/paddle.png';
 const SHIFT_Y = 50;
 
 export default class Paddle extends Mobile {
+    score;
    
     constructor(x, y, theGame) {
         super(x, y, PADDLE_IMAGE_SRC , 0, SHIFT_Y);
         this.theGame = theGame;
+        this.score = 0;
     }
 
     moveUp(){
@@ -30,5 +32,14 @@ export default class Paddle extends Mobile {
             }
             super.move();
         }
+    }
+
+    addPoint() {
+        this.score ++;
+        console.log(this.score);
+    }
+
+    resetScore() {
+        this.score = 0;
     }
 }

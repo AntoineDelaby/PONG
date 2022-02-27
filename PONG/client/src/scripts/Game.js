@@ -6,6 +6,7 @@ import Paddle from './Paddle.js';
  * a Game animates a ball bouncing in a canvas
  */
 export default class Game {
+  status;
 
   /**
    * build a Game
@@ -18,42 +19,54 @@ export default class Game {
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
     this.paddleLeft = new Paddle(10, this.canvas.height/2, this);
     this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, this);
+    this.status = 'Stop';
+    this.initPaddle();
   }
 
   /** start this game animation */
   start() {
+    this.status = 'Start';
+    document.getElementById('playButton').value = 'Stop';
     this.animate();
-    this.initPaddle();
   }
   /** stop this game animation */
   stop() {
+    this.status = 'Stop';
+    document.getElementById('playButton').value = 'Continue';
     window.cancelAnimationFrame(this.raf);
-    if(this.ball.x <= 0){
-      console.log("Point pour j2");
-      MY.player2Score += 1;
-    }else if(this.ball.x + this.ball.width >= this.canvas.width){
-      MY.player1Score += 1;
-      console.log("Point pour j1");
-    }
-    document.getElementById("scores").innerHTML = `${MY.player1Score} : ${MY.player2Score}`;
+  }
+
+  rematch() {
+    this.status = 'Start';
+    document.getElementById('playButton').value = 'Stop';
+    this.raf = null;
+    this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
+  }
+
+  displayScores() {
+    document.querySelector('#player1Score').innerText = this.paddleLeft.score
+    document.querySelector('#player2Score').innerText = this.paddleRight.score
   }
 
   initPaddle(){
     document.addEventListener("keydown", e => {
       e.preventDefault();
-      console.log("Key pressed : ", e.key);
-      if(e.key == "ArrowUp"){
-        this.paddleRight.moveUp();
-        this.moveAndDraw();
-      }else if(e.key == "ArrowDown"){
-        this.paddleRight.moveDown();
-        this.moveAndDraw();
-      }else if(e.key == "z"){
-        this.paddleLeft.moveUp();
-        this.moveAndDraw();
-      }else if(e.key == "s"){
-        this.paddleLeft.moveDown();
-        this.moveAndDraw();
+      console.log(this.status)
+      if (this.status != 'Stop') {
+        // console.log("Key pressed : ", e.key);
+        if(e.key == "ArrowUp"){
+          this.paddleRight.moveUp();
+          this.moveAndDraw();
+        }else if(e.key == "ArrowDown"){
+          this.paddleRight.moveDown();
+          this.moveAndDraw();
+        }else if(e.key == "z"){
+          this.paddleLeft.moveUp();
+          this.moveAndDraw();
+        }else if(e.key == "s"){
+          this.paddleLeft.moveDown();
+          this.moveAndDraw();
+        }
       }
     })
   }

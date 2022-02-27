@@ -3,8 +3,8 @@ import Mobile from './Mobile.js';
 
 // default values for a Ball : image and shifts
 const BALL_IMAGE_SRC = './images/balle24.png';
-const SHIFT_X = 8;
-const SHIFT_Y = 4;
+const SHIFT_X = 4;
+const SHIFT_Y = 0;
 
 
 /**
@@ -28,21 +28,49 @@ export default class Ball extends Mobile {
    * when moving a ball bounces inside the limit of its game's canvas
    */
   move() {
-    const playersScore = this.theGame.scores;
     const gamePaddleLeft = this.theGame.paddleLeft;
     const gamePaddleRight = this.theGame.paddleRight;
     if (this.y <= 0 || (this.y+this.height >= this.theGame.canvas.height)) {
       this.shiftY = - this.shiftY;    // rebond en haut ou en bas
-    }
-    else if(((this.x >= (gamePaddleLeft.x + gamePaddleLeft.width)) && (this.x <= (gamePaddleLeft.x + gamePaddleLeft.width + 10))) && ((this.y >= (gamePaddleLeft.y - 5)) && (this.y <= (gamePaddleLeft.y + gamePaddleLeft.height + 5)))){
-      this.shiftX = - this.shiftX;    // rebond sur la raquette de gauche
-    }else if(((this.x <= (gamePaddleRight.x + gamePaddleRight.width)) && (this.x >= (gamePaddleRight.x - 10))) && ((this.y >= (gamePaddleRight.y - 5)) && (this.y <= (gamePaddleRight.y + gamePaddleRight.height + 5)))){
-      this.shiftX = - this.shiftX;    // rebond sur la raquette de droite
-    }
-    else if (this.x <= 0 || this.x + this.width >= this.theGame.canvas.width) {
-      this.stopMoving();
+    } else if((this.shiftX < 0) && ((this.x >= gamePaddleLeft.x) && (this.x <= (gamePaddleLeft.x + gamePaddleLeft.width))) && ((this.y >= (gamePaddleLeft.y - this.height)) && (this.y <= (gamePaddleLeft.y + gamePaddleLeft.height)))){
+      this.shiftX = Math.abs(this.shiftX);    // rebond sur la raquette de gauche
+      this.shiftY = this.getAngle(Math.floor((this.y + (this.y + this.height)) / 2), Math.floor((gamePaddleLeft.y + (gamePaddleLeft.y + gamePaddleLeft.height)) / 2), gamePaddleLeft.height);
+    } else if((this.shiftX > 0) && (((this.x + this.width) >= gamePaddleRight.x) && ((this.x + this.width) <= (gamePaddleRight.x + gamePaddleRight.width))) && ((this.y >= (gamePaddleRight.y - this.height)) && (this.y <= (gamePaddleRight.y + gamePaddleRight.height)))){
+      this.shiftX = - Math.abs(this.shiftX);    // rebond sur la raquette de droite
+      this.shiftY = this.getAngle(Math.floor((this.y + (this.y + this.height)) / 2), Math.floor((gamePaddleRight.y + (gamePaddleRight.y + gamePaddleRight.height)) / 2), gamePaddleRight.height);
+    } else if (this.x <= 0) {
+      if (this.shiftX != 0) {
+        this.stopMoving();
+        gamePaddleRight.addPoint();
+        this.theGame.displayScores();
+        this.theGame.status = 'Rematch';
+        document.getElementById('playButton').value = this.theGame.status;
+      }
+    } else if (this.x + this.width >= this.theGame.canvas.width) {
+      if (this.shiftX != 0) {
+        this.stopMoving();
+        gamePaddleLeft.addPoint();
+        this.theGame.displayScores();
+        this.theGame.status = 'Rematch';
+        document.getElementById('playButton').value = this.theGame.status;
+      }
     }
     super.move();
+  }
+
+  getAngle(ballY, paddleY, paddleHeight) {
+    const nbSections = 8;
+    const sectionHeight = paddleHeight / nbSections;
+    const value = ballY - paddleY;
+    let res = 0;
+
+    if (value < 0) {
+      res = Math.floor(value/sectionHeight)
+    } else if (value > 0) {
+      res = Math.floor(value/sectionHeight)+1
+    }
+    console.log(res);
+    return res;
   }
 
 }
