@@ -4,7 +4,13 @@ import Paddle from './Paddle.js';
 
 const PADDLE_LEFT_IMAGE_SRC = './images/paddle_left.png';
 const PADDLE2_RIGHT_IMAGE_SRC = './images/paddle_right.png';
+
 const socket = io();
+
+socket.on('newPlayer', playerId => {
+  console.log(`${playerId} joined the game !`);
+})
+
 
 /**
  * a Game animates a ball bouncing in a canvas

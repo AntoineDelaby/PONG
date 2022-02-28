@@ -8,21 +8,28 @@
 	<meta name="author" content="JC Routier"/>
 
   <link rel="stylesheet" type="text/css" href="./style/style.css"/>
+  <script defer src="http://localhost:8080/socket.io/socket.io.js"></script>
+  <!-- <script defer src="bundle.js"></script> -->
 
 </head>
 
 
 <body>
 
-<h1 id="player"></h1>
-
-<canvas id="field" width="800" height="600">
-</canvas>
-<div>
-	<label id="scores"></label>
+<h1 id="title">PONG.js</h1>
+<div id="gameContainer">
+	<span id="speed"></span>
+	<canvas id="field" width="800" height="600"></canvas>
 </div>
+
+<section id="scores">
+	<h2>Scores</h2>
+	<br>
+	<p id="player1">Player 1 : <span id="player1Score">0</span></p>
+	<p id="player2">Player 2 : <span id="player2Score">0</span></p>
+</section>
 <div id="controls">
-  <input id="start" type="button" value="Jouer"></input>
+  <input id="playButton" type="button" value="Start"></input>
 </div>
 
 </body>

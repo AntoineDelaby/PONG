@@ -1,16 +1,38 @@
 html {
-  background-color : rgba(0,0,0,0.5);
+  background-color : rgb(66, 66, 66);
+  font-family: monospace;
 }
 #field {
     display : block;
     margin : auto;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border : 10px solid black;
+}
 
+h1, h2 {
+  color : white;
+  width: 100%;
+  margin: 20px 0 0;
+  text-align: center;
 }
 
 h1 {
-  color : white;
+  margin-bottom: 20px;
+}
+
+#gameContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#speed {
+    z-index: 0;
+    font-size: 50px;
+    color: rgb(0, 0, 0, 0.12);
+    position: absolute;
+    width: 100%;
+    text-align: center;
 }
 
 div#control {
@@ -22,14 +44,32 @@ button {
   font-size : 40px;
 }
 
-span#score{
-  display : inline-block;
-  width : 100px;
+#scores {
+  width : 800px;
   font-size : 30px;
-  text-align : right;
-  background-color : white;
-  padding : 4px;
-  margin : 4px;
+  text-align : center;
+  margin : auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#scores p {
+  margin: 0;
+}
+
+#scores p#player1 {
+  color: cornflowerblue;
+}
+
+#scores p#player2 {
+  color: orange;
+}
+
+#scores p span{
+  font-size: larger;
+  font-weight: bold;
+  color: greenyellow;
 }
 
 #controls {
