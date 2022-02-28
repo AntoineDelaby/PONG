@@ -2,6 +2,9 @@ import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 
 
+const PADDLE_LEFT_IMAGE_SRC = './images/paddle_left.png';
+const PADDLE2_RIGHT_IMAGE_SRC = './images/paddle_right.png';
+
 /**
  * a Game animates a ball bouncing in a canvas
  */
@@ -17,8 +20,8 @@ export default class Game {
     this.raf = null;
     this.canvas = canvas;
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
-    this.paddleLeft = new Paddle(10, this.canvas.height/2, this);
-    this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, this);
+    this.paddleLeft = new Paddle(10, this.canvas.height/2, PADDLE_LEFT_IMAGE_SRC, this);
+    this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, PADDLE2_RIGHT_IMAGE_SRC, this);
     this.status = 'Stop';
     this.initPaddle();
   }
@@ -27,6 +30,7 @@ export default class Game {
   start() {
     this.status = 'Start';
     document.getElementById('playButton').value = 'Stop';
+    document.getElementById('speed').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
     this.animate();
   }
   /** stop this game animation */
@@ -41,6 +45,7 @@ export default class Game {
     document.getElementById('playButton').value = 'Stop';
     this.raf = null;
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
+    document.getElementById('speed').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
   }
 
   displayScores() {

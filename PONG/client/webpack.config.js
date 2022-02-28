@@ -7,7 +7,7 @@ const PRODUCTION = true;
 export default {
   entry: './src/scripts/pong.js',
   mode :  (PRODUCTION ? 'production' : 'development'),
-  watch: true,
+  watch: false,
   output: {
     path: path.resolve('../server/public'),
     filename: 'bundle.js'
@@ -16,7 +16,7 @@ export default {
   devServer: {
     static: {
        publicPath: path.resolve('dist'),
-       watch : true
+       watch : false
     },
     host: 'localhost',
     port : 8888,

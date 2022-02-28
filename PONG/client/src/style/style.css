@@ -7,7 +7,6 @@ html {
     margin : auto;
     background-color: rgb(255, 255, 255);
     border : 10px solid black;
-
 }
 
 h1, h2 {
@@ -19,6 +18,21 @@ h1, h2 {
 
 h1 {
   margin-bottom: 20px;
+}
+
+#gameContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#speed {
+    z-index: 0;
+    font-size: 50px;
+    color: rgb(0, 0, 0, 0.12);
+    position: absolute;
+    width: 100%;
+    text-align: center;
 }
 
 div#control {
