@@ -1,10 +1,12 @@
 export default class IOController {
     #io;
     #clients;
+    #players;
   
     constructor(io) {
       this.#io = io;
       this.#clients = new Map();
+      this.#players = new Map();
     }
   
     registerSocket(socket) {
@@ -12,9 +14,9 @@ export default class IOController {
         if (this.#clients.size < 2) {
             this.#io.emit('newPlayer', socket.id);
             this.setupListeners(socket);
-            this.#clients.set(socket.id,socket);
+            this.#clients.set(socket.id, socket);
         } else {
-            socket.
+            socket.emit('server-full');
             console.log(`Server full -> ${socket.id} disconnected`);
             socket.disconnect();
         }
@@ -23,8 +25,27 @@ export default class IOController {
     setupListeners(socket) {
         socket.on('disconnect', () => {
             this.#clients.delete(socket.id);
-
+            this.#players.delete(socket.id);
             console.log(`${socket.id} disconnected.`);
+
+            // this.#clients.clear();
+            // console.log(`${socket.id} and opponent disconnected.`);
+        })
+
+        socket.on('ready', () => {
+            this.#players.set(socket.id, socket);
+            if (this.#players.size == 1) {
+                socket.emit('player1-ready');
+            } else {
+                socket.emit('player2-ready');
+                this.#players.values().next().value.emit('both-ready');
+            }
+            console.log(this.#players.size);
+        })
+
+        socket.on('not-ready', () => {
+            this.#players.delete(socket.id);
+            socket.emit('player-not-ready');
         })
     }
 
