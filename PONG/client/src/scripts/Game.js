@@ -69,6 +69,7 @@ export default class Game {
     })
 
     this.socket.on('opponent-disconnected', () => {
+      this.stop();
       this.status = 'Cursed';
       document.querySelector('body').insertAdjacentHTML('afterbegin','<div id="boxGameCursed"></div>');
       alert('Your opponent disconnected from the game. Please refresh the page (f5).');
