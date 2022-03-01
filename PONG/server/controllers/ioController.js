@@ -40,7 +40,6 @@ export default class IOController {
                 console.log(`Server full -> ${socket.id} stays in lobby.`);
                 // socket.disconnect();
             }
-            console.log(this.#players.size);
         })
 
         socket.on('not-ready', () => {

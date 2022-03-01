@@ -5,18 +5,12 @@ import Paddle from './Paddle.js';
 const PADDLE_LEFT_IMAGE_SRC = './images/paddle_left.png';
 const PADDLE2_RIGHT_IMAGE_SRC = './images/paddle_right.png';
 
-const socket = io();
-
-socket.on('newPlayer', playerId => {
-  console.log(`${playerId} joined the game !`);
-})
-
-
 /**
  * a Game animates a ball bouncing in a canvas
  */
 export default class Game {
   status;
+  socket;
 
   /**
    * build a Game
@@ -29,8 +23,41 @@ export default class Game {
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
     this.paddleLeft = new Paddle(10, this.canvas.height/2, PADDLE_LEFT_IMAGE_SRC, this);
     this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, PADDLE2_RIGHT_IMAGE_SRC, this);
-    this.status = 'Stop';
+    this.status = 'Wait';
     this.initPaddle();
+
+    this.socket = io();
+
+    this.socket.on('newConnection', playerID => {
+      console.log(`${playerID} joined the lobby !`);
+    })
+
+    this.socket.on('player1-ready', () => {
+      this.status = 'Waiting-for-player2';
+      document.getElementById('player1').style.fontSize = '50px';
+      document.getElementById('playButton').value = 'Waiting for player2 ...';
+    })
+
+    this.socket.on('player2-ready', () => {
+      document.getElementById('player2').style.fontSize = '50px';
+      document.getElementById('playButton').remove();
+    })
+
+    this.socket.on('both-ready', () => {
+      this.status = 'Stop';
+      document.getElementById('playButton').value = 'Start';
+    })
+
+    this.socket.on('player-not-ready', () => {
+      this.status = 'Wait';
+      document.getElementById('player1').style.fontSize = null;
+      document.getElementById('playButton').value = 'Connect';
+    })
+
+    this.socket.on('server-full', () => {
+      alert('Server full, can\'t connect to the game !');
+    })
+
   }
 
   /** start this game animation */

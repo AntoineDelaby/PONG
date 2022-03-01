@@ -10,7 +10,11 @@ const init = () => {
 
   startButton.addEventListener('click', e => {
     e.preventDefault();
-    if (theGame.status == 'Stop') {
+    if (theGame.status == 'Wait') {
+      theGame.socket.emit('ready');
+    } else if (theGame.status == 'Waiting-for-player2') {
+      theGame.socket.emit('not-ready');
+    } else if (theGame.status == 'Stop') {
       theGame.start()
     } else if (theGame.status == 'Start') {
       theGame.stop()
