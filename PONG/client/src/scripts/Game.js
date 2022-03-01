@@ -112,20 +112,22 @@ export default class Game {
     document.addEventListener("keydown", e => {
       e.preventDefault();
       if (this.status == 'Start' || this.status == 'Rematch') {
-        // console.log("Key pressed : ", e.key);
+        console.log("Key pressed : ", e.key);
         if(e.key == "ArrowUp"){
-          this.paddleRight.moveUp();
-          this.moveAndDraw();
-        }else if(e.key == "ArrowDown"){
-          this.paddleRight.moveDown();
-          this.moveAndDraw();
-        }else if(e.key == "z"){
+          this.socket.emit('arrowUp');
           this.paddleLeft.moveUp();
           this.moveAndDraw();
-        }else if(e.key == "s"){
+        }else if(e.key == "ArrowDown"){
           this.paddleLeft.moveDown();
           this.moveAndDraw();
         }
+        // else if(e.key == "z"){
+        //   this.paddleLeft.moveUp();
+        //   this.moveAndDraw();
+        // }else if(e.key == "s"){
+        //   this.paddleLeft.moveDown();
+        //   this.moveAndDraw();
+        // }
       }
     })
   }

@@ -77,11 +77,28 @@ export default class IOController {
             });
             this.displayNbSockets();
         })
+
+        socket.on('arrowUp', () => {
+            if (socket == this.getPlayer1()) {
+                this.getPlayer2().emit('paddleLeft-Up');
+            } else {
+                this.getPlayer1().emit('paddleRight-Up');
+            }
+            console.log(this.#players.size);
+        });
     }
 
     displayNbSockets() {
         console.log(`In Lobby : ${this.#clients.size}`);
         console.log(`In Game : ${this.#players.size}`);
+    }
+
+    getPlayer1() {
+        return Array.from(this.#players.values()).shift();
+    }
+
+    getPlayer2() {
+        return Array.from(this.#players.values()).pop();
     }
 
   }
