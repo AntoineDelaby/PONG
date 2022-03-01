@@ -15,11 +15,11 @@ const init = () => {
     } else if (theGame.status == 'Waiting-for-player2') {
       theGame.socket.emit('not-ready');
     } else if (theGame.status == 'Stop') {
-      theGame.start()
+      theGame.socket.emit('req-start');
     } else if (theGame.status == 'Start') {
-      theGame.stop()
+      theGame.socket.emit('req-stop');
     } else if (theGame.status == 'Rematch') {
-      theGame.rematch()
+      theGame.socket.emit('req-rematch');
     }
   })
 

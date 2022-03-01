@@ -24,7 +24,6 @@ export default class Game {
     this.paddleLeft = new Paddle(10, this.canvas.height/2, PADDLE_LEFT_IMAGE_SRC, this);
     this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, PADDLE2_RIGHT_IMAGE_SRC, this);
     this.status = 'Wait';
-    this.initPaddle();
 
     this.socket = io();
 
@@ -50,12 +49,21 @@ export default class Game {
       document.getElementById('playButton').value = 'Start';
     })
 
+    this.socket.on('initPaddles', () => {
+      this.initPaddle();
+    })
+
+    this.socket.on('hide-playButton', () => {
+      document.getElementById('playButton').style.display = "none";
+    })
+
     this.socket.on('0/2 players', () => {
       this.status = 'Wait';
+      this.resetScores();
       document.getElementById('player1').style.fontSize = null;
       document.getElementById('player2').style.fontSize = null;
-      document.getElementById('playButton').style.display = null;
       document.getElementById('playButton').value = 'Connect';
+      document.getElementById('playButton').style.display = null;
       document.getElementById('gameInfo').innerText = '0/2 players';
     })
 
@@ -77,6 +85,50 @@ export default class Game {
 
     this.socket.on('server-full', () => {
       alert('Server full, can\'t connect to the game !');
+    })
+
+    this.socket.on('paddleLeft-Up', () => {
+      this.paddleLeft.moveUp();
+      this.moveAndDraw();
+    })
+
+    this.socket.on('paddleRight-Up', () => {
+      this.paddleRight.moveUp();
+      this.moveAndDraw();
+    })
+
+    this.socket.on('paddleLeft-Down', () => {
+      this.paddleLeft.moveDown();
+      this.moveAndDraw();
+    })
+
+    this.socket.on('paddleRight-Down', () => {
+      this.paddleRight.moveDown();
+      this.moveAndDraw();
+    })
+
+    this.socket.on('start', () => {
+      this.start();
+    })
+
+    this.socket.on('stop', () => {
+      this.stop();
+    })
+
+    this.socket.on('rematch', () => {
+      this.rematch();
+    })
+
+    this.socket.on('gameInProgress', () => {
+      document.getElementById('gameInfo').innerText = 'The Game is in Progress';
+    })
+
+    this.socket.on('gamePaused', () => {
+      document.getElementById('gameInfo').innerText = 'The Game is Paused';
+    })
+
+    this.socket.on('gameOver', () => {
+      document.getElementById('gameInfo').innerText = 'The Game is Over';
     })
 
   }
@@ -108,26 +160,21 @@ export default class Game {
     document.querySelector('#player2Score').innerText = this.paddleRight.score
   }
 
+  resetScores() {
+    this.paddleLeft.resetScore();
+    this.paddleRight.resetScore();
+  }
+
   initPaddle(){
+    console.log('paddleKeysInited');
     document.addEventListener("keydown", e => {
-      e.preventDefault();
       if (this.status == 'Start' || this.status == 'Rematch') {
         console.log("Key pressed : ", e.key);
         if(e.key == "ArrowUp"){
           this.socket.emit('arrowUp');
-          this.paddleLeft.moveUp();
-          this.moveAndDraw();
         }else if(e.key == "ArrowDown"){
-          this.paddleLeft.moveDown();
-          this.moveAndDraw();
+          this.socket.emit('arrowDown');
         }
-        // else if(e.key == "z"){
-        //   this.paddleLeft.moveUp();
-        //   this.moveAndDraw();
-        // }else if(e.key == "s"){
-        //   this.paddleLeft.moveDown();
-        //   this.moveAndDraw();
-        // }
       }
     })
   }

@@ -30,40 +30,44 @@ export default class Ball extends Mobile {
   move() {
     const gamePaddleLeft = this.theGame.paddleLeft;
     const gamePaddleRight = this.theGame.paddleRight;
-    if (this.y <= 0 || (this.y+this.height >= this.theGame.canvas.height)) {
+    if (this.collidesWithWall()) {
+      this.shiftX = this.addBallSpeedX();
       this.shiftY = - this.shiftY;    // rebond en haut ou en bas
-    } else if((this.shiftX < 0) && ((this.x >= gamePaddleLeft.x) && (this.x <= (gamePaddleLeft.x + gamePaddleLeft.width))) && ((this.y >= (gamePaddleLeft.y - this.height)) && (this.y <= (gamePaddleLeft.y + gamePaddleLeft.height)))){
-      this.shiftX = Math.abs(this.shiftX) + 1;    // rebond sur la raquette de gauche
-      document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.shiftX)}`;
-      this.shiftY = this.getAngle(Math.floor((this.y + (this.y + this.height)) / 2), Math.floor((gamePaddleLeft.y + (gamePaddleLeft.y + gamePaddleLeft.height)) / 2), gamePaddleLeft.height);
-    } else if((this.shiftX > 0) && (((this.x + this.width) >= gamePaddleRight.x) && ((this.x + this.width) <= (gamePaddleRight.x + gamePaddleRight.width))) && ((this.y >= (gamePaddleRight.y - this.height)) && (this.y <= (gamePaddleRight.y + gamePaddleRight.height)))){
-      this.shiftX = - Math.abs(this.shiftX) - 1;    // rebond sur la raquette de droite
-      document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.shiftX)}`;
-      this.shiftY = this.getAngle(Math.floor((this.y + (this.y + this.height)) / 2), Math.floor((gamePaddleRight.y + (gamePaddleRight.y + gamePaddleRight.height)) / 2), gamePaddleRight.height);
-    } else if (this.x <= 0) {
+    } else if((this.shiftX < 0) && this.collidesWithPaddleLeft()) { // rebond sur la raquette de gauche
+      this.shiftX = Math.abs(this.addBallSpeedX());
+      this.shiftY = this.getAngle(gamePaddleLeft);
+    } else if((this.shiftX > 0) && this.collidesWithPaddleRight()) { // rebond sur la raquette de droite
+      this.shiftX = - Math.abs(this.addBallSpeedX());
+      this.shiftY = this.getAngle(gamePaddleRight);
+    } else if (this.collidesWithLeftBorder()) {
       if (this.shiftX != 0) {
-        this.stopMoving();
         gamePaddleRight.addPoint();
-        this.theGame.displayScores();
-        this.theGame.status = 'Rematch';
-        document.getElementById('playButton').value = this.theGame.status;
+        this.gameOver();
       }
-    } else if (this.x + this.width >= this.theGame.canvas.width) {
+    } else if (this.collidesWithRightBorder()) {
       if (this.shiftX != 0) {
-        this.stopMoving();
         gamePaddleLeft.addPoint();
-        this.theGame.displayScores();
-        this.theGame.status = 'Rematch';
-        document.getElementById('playButton').value = this.theGame.status;
+        this.gameOver();
       }
     }
     super.move();
   }
 
-  getAngle(ballY, paddleY, paddleHeight) {
+  gameOver() {
+    this.stopMoving();
+    this.theGame.displayScores();
+    this.theGame.status = 'Rematch';
+    document.getElementById('playButton').value = this.theGame.status;
+    this.theGame.socket.emit('req-over');
+  }
+
+  getAngle(paddle) {
+    const ballCenterY = Math.floor((this.y + (this.y + this.height)) / 2);
+    const paddleCenterY = Math.floor((paddle.y + (paddle.y + paddle.height)) / 2);
     const nbSections = 8;
-    const sectionHeight = paddleHeight / nbSections;
-    const value = ballY - paddleY;
+    const sectionHeight = paddleCenterY / nbSections;
+    const value = ballCenterY - paddleCenterY;
+
     let res = 0;
 
     if (value < 0) {
@@ -72,6 +76,38 @@ export default class Ball extends Mobile {
       res = Math.floor(value/sectionHeight)+1
     }
     return res;
+  }
+
+  addBallSpeedX() {
+    const newSpeed = this.shiftX < 0 ? - Math.abs(this.shiftX) - 1 : Math.abs(this.shiftX) + 1;
+    this.updateSpeedDisplay();
+    return newSpeed;
+  }
+
+  updateSpeedDisplay() {
+    document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.shiftX)}`;
+  }
+
+  collidesWithWall() {
+    return (this.y <= 0 || (this.y + this.height >= this.theGame.canvas.height));
+  }
+
+  collidesWithPaddleLeft() {
+    const gamePaddleLeft = this.theGame.paddleLeft;
+    return ((this.x >= gamePaddleLeft.x) && (this.x <= (gamePaddleLeft.x + gamePaddleLeft.width))) && ((this.y >= (gamePaddleLeft.y - this.height)) && (this.y <= (gamePaddleLeft.y + gamePaddleLeft.height)));
+  }
+
+  collidesWithPaddleRight() {
+    const gamePaddleRight = this.theGame.paddleRight;
+    return (((this.x + this.width) >= gamePaddleRight.x) && ((this.x + this.width) <= (gamePaddleRight.x + gamePaddleRight.width))) && ((this.y >= (gamePaddleRight.y - this.height)) && (this.y <= (gamePaddleRight.y + gamePaddleRight.height)));
+  }
+
+  collidesWithLeftBorder() {
+    return this.x <= 0;
+  }
+
+  collidesWithRightBorder() {
+    return ((this.x + this.width) >= this.theGame.canvas.width);
   }
 
 }
