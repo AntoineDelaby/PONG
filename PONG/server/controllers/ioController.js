@@ -30,8 +30,8 @@ export default class IOController {
             if (this.#players.has(socket.id)) {
                 this.#players.forEach((player,playerID) => {
                     if (playerID != socket.id) {
-                        console.log(`${playerID} left the game => Back to lobby.`);
-                        this.#clients.set(playerID, player);
+                        console.log(`${playerID} left the game => Waiting for user to disconnect.`);
+                        player.emit('opponent-disconnected');
                     } else {
                         console.log(`${playerID} left the game => disconnected.`);
                     }

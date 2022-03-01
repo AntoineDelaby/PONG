@@ -68,6 +68,12 @@ export default class Game {
       document.getElementById('gameInfo').innerText = 'The Game is about to start';
     })
 
+    this.socket.on('opponent-disconnected', () => {
+      this.status = 'Cursed';
+      document.querySelector('body').insertAdjacentHTML('afterbegin','<div id="boxGameCursed"></div>');
+      alert('Your opponent disconnected from the game. Please refresh the page (f5).');
+    })
+
     this.socket.on('server-full', () => {
       alert('Server full, can\'t connect to the game !');
     })
@@ -104,7 +110,7 @@ export default class Game {
   initPaddle(){
     document.addEventListener("keydown", e => {
       e.preventDefault();
-      if (this.status != 'Stop') {
+      if (this.status == 'Start' || this.status == 'Rematch') {
         // console.log("Key pressed : ", e.key);
         if(e.key == "ArrowUp"){
           this.paddleRight.moveUp();
