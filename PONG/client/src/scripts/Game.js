@@ -36,11 +36,13 @@ export default class Game {
       this.status = 'Waiting-for-player2';
       document.getElementById('player1').style.fontSize = '50px';
       document.getElementById('playButton').value = 'Waiting for player2 ...';
+      document.getElementById('gameInfo').innerText = 'You are player1 !';
     })
 
     this.socket.on('player2-ready', () => {
       document.getElementById('player2').style.fontSize = '50px';
-      document.getElementById('playButton').remove();
+      document.getElementById('playButton').style.display = 'none';
+      document.getElementById('gameInfo').innerText = 'You are player2 !';
     })
 
     this.socket.on('both-ready', () => {
@@ -48,10 +50,22 @@ export default class Game {
       document.getElementById('playButton').value = 'Start';
     })
 
-    this.socket.on('player-not-ready', () => {
+    this.socket.on('0/2 players', () => {
       this.status = 'Wait';
       document.getElementById('player1').style.fontSize = null;
+      document.getElementById('player2').style.fontSize = null;
+      document.getElementById('playButton').style.display = null;
       document.getElementById('playButton').value = 'Connect';
+      document.getElementById('gameInfo').innerText = '0/2 players';
+    })
+
+    this.socket.on('1/2 players', () => {
+      document.getElementById('gameInfo').innerText = '1/2 players';
+    })
+
+    this.socket.on('2/2 players', () => {
+      document.getElementById('playButton').value = 'Game Full';
+      document.getElementById('gameInfo').innerText = 'The Game is about to start';
     })
 
     this.socket.on('server-full', () => {
@@ -64,7 +78,7 @@ export default class Game {
   start() {
     this.status = 'Start';
     document.getElementById('playButton').value = 'Stop';
-    document.getElementById('speed').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
+    document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
     this.animate();
   }
   /** stop this game animation */
@@ -79,7 +93,7 @@ export default class Game {
     document.getElementById('playButton').value = 'Stop';
     this.raf = null;
     this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
-    document.getElementById('speed').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
+    document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
   }
 
   displayScores() {

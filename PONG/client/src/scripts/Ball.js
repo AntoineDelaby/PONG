@@ -34,11 +34,11 @@ export default class Ball extends Mobile {
       this.shiftY = - this.shiftY;    // rebond en haut ou en bas
     } else if((this.shiftX < 0) && ((this.x >= gamePaddleLeft.x) && (this.x <= (gamePaddleLeft.x + gamePaddleLeft.width))) && ((this.y >= (gamePaddleLeft.y - this.height)) && (this.y <= (gamePaddleLeft.y + gamePaddleLeft.height)))){
       this.shiftX = Math.abs(this.shiftX) + 1;    // rebond sur la raquette de gauche
-      document.getElementById('speed').innerText = `Speed = ${Math.abs(this.shiftX)}`;
+      document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.shiftX)}`;
       this.shiftY = this.getAngle(Math.floor((this.y + (this.y + this.height)) / 2), Math.floor((gamePaddleLeft.y + (gamePaddleLeft.y + gamePaddleLeft.height)) / 2), gamePaddleLeft.height);
     } else if((this.shiftX > 0) && (((this.x + this.width) >= gamePaddleRight.x) && ((this.x + this.width) <= (gamePaddleRight.x + gamePaddleRight.width))) && ((this.y >= (gamePaddleRight.y - this.height)) && (this.y <= (gamePaddleRight.y + gamePaddleRight.height)))){
       this.shiftX = - Math.abs(this.shiftX) - 1;    // rebond sur la raquette de droite
-      document.getElementById('speed').innerText = `Speed = ${Math.abs(this.shiftX)}`;
+      document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.shiftX)}`;
       this.shiftY = this.getAngle(Math.floor((this.y + (this.y + this.height)) / 2), Math.floor((gamePaddleRight.y + (gamePaddleRight.y + gamePaddleRight.height)) / 2), gamePaddleRight.height);
     } else if (this.x <= 0) {
       if (this.shiftX != 0) {
