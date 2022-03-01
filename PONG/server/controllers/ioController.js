@@ -11,15 +11,9 @@ export default class IOController {
   
     registerSocket(socket) {
         console.log(`Connection done by ${socket.id}.`);
-        if (this.#clients.size < 2) {
-            this.#io.emit('newPlayer', socket.id);
-            this.setupListeners(socket);
-            this.#clients.set(socket.id, socket);
-        } else {
-            socket.emit('server-full');
-            console.log(`Server full -> ${socket.id} disconnected`);
-            socket.disconnect();
-        }
+        this.#io.emit('newConnection', socket.id);
+        this.setupListeners(socket);
+        this.#clients.set(socket.id, socket);
     }
   
     setupListeners(socket) {
@@ -33,12 +27,18 @@ export default class IOController {
         })
 
         socket.on('ready', () => {
-            this.#players.set(socket.id, socket);
-            if (this.#players.size == 1) {
-                socket.emit('player1-ready');
+            if (this.#players.size < 2) {
+                this.#players.set(socket.id, socket);
+                if (this.#players.size == 1) {
+                    socket.emit('player1-ready');
+                } else {
+                    socket.emit('player2-ready');
+                    this.#players.values().next().value.emit('both-ready');
+                }
             } else {
-                socket.emit('player2-ready');
-                this.#players.values().next().value.emit('both-ready');
+                socket.emit('server-full');
+                console.log(`Server full -> ${socket.id} stays in lobby.`);
+                // socket.disconnect();
             }
             console.log(this.#players.size);
         })
