@@ -4,6 +4,8 @@ import Paddle from './Paddle.js';
 
 const PADDLE_LEFT_IMAGE_SRC = './images/paddle_left.png';
 const PADDLE2_RIGHT_IMAGE_SRC = './images/paddle_right.png';
+const SHIFT_X = 4;
+const SHIFT_Y = 0;
 
 /**
  * a Game animates a ball bouncing in a canvas
@@ -20,7 +22,7 @@ export default class Game {
   constructor(canvas) {
     this.raf = null;
     this.canvas = canvas;
-    this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
+    this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, SHIFT_X, SHIFT_Y, this);
     this.paddleLeft = new Paddle(10, this.canvas.height/2, PADDLE_LEFT_IMAGE_SRC, this);
     this.paddleRight = new Paddle((this.canvas.width - 37), this.canvas.height/2, PADDLE2_RIGHT_IMAGE_SRC, this);
     this.status = 'Wait';
@@ -115,8 +117,8 @@ export default class Game {
       this.stop();
     })
 
-    this.socket.on('rematch', () => {
-      this.rematch();
+    this.socket.on('rematch', (directionAleaX, directionAleaY) => {
+      this.rematch(directionAleaX, directionAleaY);
     })
 
     this.socket.on('gameInProgress', () => {
@@ -147,11 +149,11 @@ export default class Game {
     window.cancelAnimationFrame(this.raf);
   }
 
-  rematch() {
+  rematch(shiftX, shiftY) {
     this.status = 'Start';
     document.getElementById('playButton').value = 'Stop';
     this.raf = null;
-    this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, this);
+    this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, shiftX, shiftY, this);
     document.getElementById('gameInfo').innerText = `Speed = ${Math.abs(this.ball.shiftX)}`;
   }
 
@@ -166,10 +168,9 @@ export default class Game {
   }
 
   initPaddle(){
-    console.log('paddleKeysInited');
     document.addEventListener("keydown", e => {
       if (this.status == 'Start' || this.status == 'Rematch') {
-        console.log("Key pressed : ", e.key);
+        // console.log("Key pressed : ", e.key);
         if(e.key == "ArrowUp"){
           this.socket.emit('arrowUp');
         }else if(e.key == "ArrowDown"){

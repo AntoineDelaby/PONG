@@ -3,8 +3,6 @@ import Mobile from './Mobile.js';
 
 // default values for a Ball : image and shifts
 const BALL_IMAGE_SRC = './images/balle24.png';
-const SHIFT_X = 4;
-const SHIFT_Y = 0;
 
 
 /**
@@ -18,8 +16,8 @@ export default class Ball extends Mobile {
    * @param  {number} y       the y coordinate
    * @param  {Game} theGame   the Game this ball belongs to
    */
-  constructor(x, y, theGame) {
-    super(x, y, BALL_IMAGE_SRC , SHIFT_X, SHIFT_Y);
+  constructor(x, y, shiftX, shiftY, theGame) {
+    super(x, y, BALL_IMAGE_SRC , shiftX, shiftY);
     this.theGame = theGame;
   }
 
@@ -32,12 +30,15 @@ export default class Ball extends Mobile {
     const gamePaddleRight = this.theGame.paddleRight;
     if (this.collidesWithWall()) {
       this.shiftX = this.addBallSpeedX();
+      this.updateSpeedDisplay();
       this.shiftY = - this.shiftY;    // rebond en haut ou en bas
     } else if((this.shiftX < 0) && this.collidesWithPaddleLeft()) { // rebond sur la raquette de gauche
       this.shiftX = Math.abs(this.addBallSpeedX());
+      this.updateSpeedDisplay();
       this.shiftY = this.getAngle(gamePaddleLeft);
     } else if((this.shiftX > 0) && this.collidesWithPaddleRight()) { // rebond sur la raquette de droite
       this.shiftX = - Math.abs(this.addBallSpeedX());
+      this.updateSpeedDisplay();
       this.shiftY = this.getAngle(gamePaddleRight);
     } else if (this.collidesWithLeftBorder()) {
       if (this.shiftX != 0) {
@@ -78,10 +79,9 @@ export default class Ball extends Mobile {
     return res;
   }
 
-  addBallSpeedX() {
+  addBallSpeedX() { // Max 25 speed (car largeur paddle = 27)
     const newSpeed = this.shiftX < 0 ? - Math.abs(this.shiftX) - 1 : Math.abs(this.shiftX) + 1;
-    this.updateSpeedDisplay();
-    return newSpeed;
+    return Math.abs(newSpeed) > 25 ? 25 : newSpeed;
   }
 
   updateSpeedDisplay() {

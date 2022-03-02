@@ -94,7 +94,11 @@ export default class IOController {
         })
 
         socket.on('req-rematch', () => {
-            this.emitToPlayers('rematch');
+            const directionAleaX = (8*(Math.floor(Math.random() * 2)) -4); // 4 or -4
+            const directionAleaY = (Math.floor(Math.random() * (5)) -2); // -2 à 2
+            this.#players.forEach((player,playerID) => {
+                player.emit('rematch', directionAleaX, directionAleaY);
+            });
             this.emitToClients('gameInProgress');
         })
 
