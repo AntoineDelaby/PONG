@@ -58,7 +58,8 @@ Ce projet est organisé de la manière suivante :
 # Le jeu en profondeur & Explications de nos choix :
 #### Les échanges clients / serveur :
 
-1. Paddles :
+1. **Paddles :**
+
     Lorsqu'un joueur déplace son paddle dans une direction Y, on envoie au serveur un message de la direction choisie.
     
     ```js
@@ -98,7 +99,8 @@ Ce projet est organisé de la manière suivante :
         })
     ```
 
-2. La Balle :
+2. **La Balle :**
+
     Nous avons choisi de ne pas communiquer les coordonnées de la balle avec le serveur au cours de la partie :
 
     En effet, au lieu de demander au serveur de gérer les déplacements de la balle ce qui peut entraîner moultes désynchronisations, nous avons préféré l'approche suivante : Les deux joueurs sont chacun dans une partie. Chaque action d'un joueur est répercuté sur la partie de l'autre joueur (lancement de la partie, pause, déplacement d'un paddle). Ainsi gérer la balle côté serveur nous a semblé beaucoup plus lourd que nécessaire.
@@ -128,7 +130,8 @@ Ce projet est organisé de la manière suivante :
 
 #### Autres Fonctionnements :
 
-1. Gameplay & Fun :
+1. **Gameplay & Fun :**
+
     - Pour rajouter du piment à la partie nous avons ajouté une fonctionnalité : Lorsque la balle rebondi sur un Paddle ou un Joueur, sa vitesse augmente de 1 ! 
 
     > (Avec une vitesse maximale fixée à 25. Car au delà, sa vitesse dépasse la largeur du paddle et ne peut donc pas être interceptée par un joueur).
