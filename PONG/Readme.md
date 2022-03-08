@@ -10,7 +10,8 @@
 # Organisation du `Dossier PONG` :
 
 Dans ce dossier, vous trouverez :
-- Un fichier **Readme.md** contenant les informations élémentaires du TP
+- Un fichier **Readme.md** contenant les informations élémentaires du TP.
+- Un fichier **RAPPORT.md** contenant les informations relatives au fonctionnement et à la structure du TP.
 - Un `Dossier client` contenant le code client.
 - Un `Dossier server` contenant le code serveur.
 
